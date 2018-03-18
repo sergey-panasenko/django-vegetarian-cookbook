@@ -1,0 +1,19 @@
+body {
+}
+
+.recipe,.title {
+    background:#fafafa;
+    margin:10px;
+    border-radius:20px;
+    padding:10px 20px;
+    z-index:1;
+    position:relative
+}
+
+.recipe__image img {
+    width:100%;
+}
+
+.recipe__main table {
+    width:100%;
+}

@@ -1,0 +1,170 @@
+{% extends "vegetarian_cookbook/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load admin_urls %}
+
+{% block bootstrap4_extra_head %}
+<title>{{ recipe.title }}</title>
+{% endblock %}
+
+{% block bootstrap4_content %}
+
+<div class="container">
+    <div class="recipe js_recipe js_recipe-{{ recipe.id }}">
+        <div class="recipe__title row">
+            <div class="col">
+                <h2 class="center ">
+                     <a href="{% url 'recipes_recipe' recipe.url %}">
+                         {{ recipe.title }}
+                     </a>
+                    <a href="{% url 'recipes_category' recipe.category.name %}">
+                        <span class="badge badge-info">{{ recipe.category.name }}</span>
+                    </a>
+                    {% if perms.vegetarian_cookbook.can_change %}
+                    <a href="{% url 'admin:vegetarian_cookbook_recipe_change' recipe.id %}">
+                        <span class="badge badge-primary">edit</span>
+                    </a>
+                    {% endif %}
+                 </h2>
+            </div>
+        </div>
+        {% if recipe.image %}
+            <div class="recipe__image row">
+                <div class="col">
+                    <div class="">
+                        <img src="{{recipe.image.url }}">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="recipe__main row">
+            <div class="col">
+                <div class="recipe__description">
+                     {{ recipe.description |safe }}
+               </div>
+            </div>
+        </div>
+        <div class="recipe__main row">
+            <div class="col">
+                <div class="recipe__ingredients">
+                    <table class="table">
+                    {% for ri in recipe.recipeingredient_set.all %}
+                        <tr class="">
+                            <td>
+                                {{ ri.ingredient.name }}
+                            </td>
+                            <td>
+                                {% if ri.quantity %}
+                                    {{ ri.weight }}
+                                    {{ ri.unit.name }}
+                                    ({{ ri.weight }}
+                                    {% trans "gram" %})
+                                {% else %}
+                                    {{ ri.weight }}
+                                    {% trans "gram" %}
+                                {% endif %}
+                                {% if ri.roughly %}
+                                    *
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                    {% if recipe.has_roughly %}
+                        <small> * - {% trans "roughly" %}.</small>
+                    {% endif %}
+               </div>
+            </div>
+        </div>
+        <script type="text/python">
+            from browser import window
+            import json
+            import recipe
+            ingredients = []
+            {% for ri in recipe.recipeingredient_set.all %}
+            ingredients.append( recipe.Ingredient( {{ ri.ingredient.id }}, "{{ ri.weight }}", "{{ ri.ingredient.energy }}" ))
+            {% endfor %}
+            window.recipe = recipe.Recipe( {{ recipe.id }}, ingredients, {{ recipe.weight }});
+        </script>
+        <div class="recipe__main row">
+            <div class="col">
+                <div class="calculator_button">
+                    <h3>{% trans "Calculator" %}</h3>
+                </div>
+                <div class="recipe__ingredients js_calculator">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">
+                                    {% trans "Ingredient name" %}
+                                </th>
+                                <th scope="col">
+                                    {% trans "Weight, gram" %}
+                                </th>
+                                <th scope="col">
+                                    {% trans "Energy/100g, kiloCalories" %}
+                                </th>
+                                <th scope="col">
+                                    {% trans "Energy, kiloCalories" %}
+                                </th>
+                            </tr>
+                        </thead>
+                    {% for ri in recipe.recipeingredient_set.all %}
+                        <tr class="js_recipe_ingredient js_recipe_ingredient-{{ ri.ingredient.id }}" data-id="{{ ri.ingredient.id }}">
+                            <td>
+                                {{ ri.ingredient.name }}
+                            </td>
+                            <td>
+                                <input class="recipe__ingredient__input js_recipe_ingredient_weight" value="{{ ri.weight }}" autocomplete="off">
+                                {% if ri.roughly %}
+                                    *
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ ri.ingredient.energy }}
+                            </td>
+                            <td class="recipe_ingredient_calculated_energy recipe_ingredient_calculated_energy">
+                                --
+                            </td>
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                            <td>
+                                <b>{% trans "Total" %}</b>
+                            </td>
+                            <td>
+                                <input class="recipe__ingredients__weigth js_weigth" id="js_weigth" value="{{ recipe.weight }}">
+                            </td>
+                            <td class="recipe__ingredients__energy js_energy" title="{% trans 'Energy/100g, kiloCalories' %}"></td>
+                            <td class="recipe__ingredients__energytotal js_energytotal" title="{% trans 'Energy total, kiloCalories' %}"></td>
+                        </tr>
+                    </table>
+
+                    <div class="alert alert-warning js_message">{% trans "please wait" %}</div>
+               </div>
+            </div>
+        </div>
+        <div class="recipe__main row">
+            <div class="col">
+                <div class="recipe__tags">
+                    {% for rt in recipe.tags.all %}
+                        <a href="{% url 'recipes_tags' rt.name %}">
+                            <button type="button" class="btn btn-secondary">{{ rt.name }}</button>
+                        </a>
+                    {% endfor %}
+               </div>
+            </div>
+        </div>
+        <div class="recipe__images row">
+            <div class="col">
+                <div class="">
+                {% for im in recipe.recipeimage_set.all %}
+                     <img src="{{im.image.url }}">
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
