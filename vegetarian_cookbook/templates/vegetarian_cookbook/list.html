@@ -1,78 +1,72 @@
 {% extends "vegetarian_cookbook/base.html" %}
 {% load static %}
 {% load i18n %}
+{% load vegetarian_cookbook_tags %}
 
 {% block bootstrap4_extra_head %}
-<link href='{% static "vegetarian_cookbook/css/style.css" %}' rel="stylesheet">
 <title>{{ title }}</title>
 {% endblock %}
 
 {% block bootstrap4_content %}
 
 <div class="container">
-    <div class="title">
-        <h2>{{ title }}</h2>
-    </div>
-    {% for recipe in recipes %}
-    <div class="recipe">
-        <div class="recipe__title row">
-            <div class="col">
-                <a href="{% url 'recipes_recipe' recipe.url %}">
-                    <h2 class="center ">
-                        {{ recipe.title }}
-                        <a href="{% url 'recipes_category' recipe.category.name %}">
-                            <span class="badge badge-info">{{ recipe.category.name }}</span>
-                        </a>
-                    </h2>
-                </a>
-                <h5 class="center"></h5>
-            </div>
+
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">{{ title }}</h1>
         </div>
-        <div class="recipe__image row">
-            <div class="col">
-                <div class="">
-                    <img src="{{recipe.image.url }}">
+      </section>
+
+      <div class="py-5 bg-light">
+        <div class="container">
+
+          <div class="row">
+            {% for recipe in recipes %}
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <div class="recipe__card_category position-absolute m-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='{% url 'recipes_category' recipe.category.name %}'" title="{{ recipe.category.name }}">
+                        {% if recipe.category.image %}
+                            <img style="width:32px" src="{{recipe.category.image.url }}">
+                        {% else %}
+                            {{ recipe.category.name }}
+                        {% endif %}
+                    </button>
                 </div>
+                <a href="{% url 'recipes_recipe' recipe.url %}">
+                    <img class="card-img-top" src="{{recipe.thumbnail.url }}" alt="{{ recipe.title }}">
+                </a>
+                <div class="card-body position-relative">
+                    <div class="position-absolute" style="top:-80px; z-index:3">
+                        {% recipe_energy_nutrients 60 False recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
+                    </div>
+                    <a href="{% url 'recipes_recipe' recipe.url %}">
+                        <h6 class="text-center mb-1">
+                            {{ recipe.title }}
+                        </h6>
+                    </a>
+                    {% ingredients_list 5 recipe.recipeingredient_set.all %}
+                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group overflow-hidden">
+                        {% for rt in recipe.tags.all|slice:":3" %}
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='{% url 'recipes_tags' rt.name %}'">{{ rt.name }}</button>
+                        {% endfor %}
+
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            {% endfor %}
+
+          </div>
         </div>
-        <div class="recipe__main row">
-            <div class="col">
-                <div class="recipe__description">
-                     {{ recipe.description |safe }}
-               </div>
-            </div>
-        </div>
-        <div class="recipe__main row"admin/reports/status>
-            <div class="col">
-                <div class="recipe__ingredients">
-                    <table>
-                    {% for ri in recipe.recipeingredient_set.all %}
-                        <tr>
-                            <td>
-                                {{ ri.ingredient.name }}
-                            </td>
-                            <td>
-                                {{ ri.weight }} {% trans "gram" %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </table>
-               </div>
-            </div>
-        </div>
-        <div class="recipe__main row"admin/reports/status>
-            <div class="col">
-                <div class="recipe__tags">
-                    {% for rt in recipe.recipetag_set.all %}
-                        <a href="{% url 'recipes_tags' rt.tag.name %}">
-                            <button type="button" class="btn btn-secondary">{{ rt.tag.name }}</button>
-                        </a>
-                    {% endfor %}
-               </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+      </div>
+
+    </main>
+
 </div>
 
 {% endblock %}

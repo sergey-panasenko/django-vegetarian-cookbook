@@ -166,7 +166,7 @@ TINYMCE_DEFAULT_CONFIG = {
     "Webdings=webdings;" +
     "Wingdings=wingdings,zapf dingbats",}
 TINYMCE_SPELLCHECKER = True
-TINYMCE_COMPRESSOR = True
+TINYMCE_COMPRESSOR = False
 
 BOOTSTRAP4 = {
     'error_css_class': 'bootstrap4-error',

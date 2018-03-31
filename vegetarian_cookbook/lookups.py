@@ -4,8 +4,17 @@
 from django.utils.html import escape
 from django.db.models import Q
 from ajax_select import LookupChannel
-from .models import Tag, Ingredient, Unit, IngredientUnit
+from .models import Tag, Ingredient, Nutrient, Unit, IngredientUnit
 import ajax_select
+
+@ajax_select.register('Nutrient')
+class NutrientLookup(LookupChannel):
+
+    model = Nutrient
+
+    def get_query(self, q, request):
+        q_capitalized = q.capitalize();
+        return Nutrient.objects.filter(Q(name__icontains=q) | Q(name__icontains=q_capitalized)).order_by('name')
 
 @ajax_select.register('Tag')
 class TagLookup(LookupChannel):
@@ -34,3 +43,4 @@ class IngredientUnitLookup(LookupChannel):
         return IngredientUnit.objects.filter().order_by('unit__name') #add filter by ingredient!
     def can_add(self, user, model):
         return False
+

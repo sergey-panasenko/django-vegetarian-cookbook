@@ -11,12 +11,23 @@ from ajax_select.admin import AjaxSelectAdmin, AjaxSelectAdminTabularInline, Aja
 from django.core.exceptions import ValidationError
 from functools import partial
 
-from .models import Unit, Ingredient, IngredientUnit, Category, Tag, Recipe, RecipeIngredient, RecipeImage
+from .models import Nutrient, Unit, Ingredient, IngredientUnit, IngredientNutritionalValue, Category, Tag, Recipe, RecipeIngredient, RecipeImage
 from .forms import RecipeIngredientInlineForm
 
 admin.site.site_header = _('My recipes')
 
-admin.site.register(Category)
+admin.site.register(Nutrient)
+
+class CategoryAdmin(admin.ModelAdmin):
+    admin_thumbnail = AdminThumbnail(image_field='thumbnail')
+    admin_thumbnail.short_description = _('Thumbnail')
+
+admin.site.register(
+    Category,
+    CategoryAdmin,
+    list_display = ('admin_thumbnail', 'name'),
+    list_display_links = ['name'],
+)
 
 
 class UnitAdmin(AjaxSelectAdmin):
@@ -25,20 +36,44 @@ class UnitAdmin(AjaxSelectAdmin):
 admin.site.register(Unit,UnitAdmin)
 
 class TagAdmin(AjaxSelectAdmin):
-    pass
+    readonly_fields = ('counter',)
+    def get_ordering(self, request):
+        return ['name']
 
-admin.site.register(Tag,TagAdmin)
+admin.site.register(
+    Tag,
+    TagAdmin,
+    list_display = ('name', 'counter'),
+)
 
 class IngredientUnitInline(AjaxSelectAdminTabularInline):
     model = IngredientUnit
     extra = 0
 
+class IngredientNutritionalValueInline(AjaxSelectAdminTabularInline):
+    model = IngredientNutritionalValue
+    form = make_ajax_form(IngredientNutritionalValue, {'nutrient': 'Nutrient'})
+    extra = 0
+
 class IngredientAdmin(AjaxSelectAdmin):
+    admin_thumbnail = AdminThumbnail(image_field='thumbnail')
+    admin_thumbnail.short_description = _('Thumbnail')
     inlines = [
         IngredientUnitInline,
+        IngredientNutritionalValueInline
     ]
+    def get_ordering(self, request):
+        return ['name']
+    def some_output(self, obj):
+        return "%.xf" % obj.to_display
 
-admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(
+    Ingredient,
+    IngredientAdmin,
+    list_display = ('admin_thumbnail', 'name', 'energy', 'protein', 'fat', 'carbohydrate'),
+    list_display_links = ['name'],
+    search_fields = ['name']
+)
 
 
 class RecipeIngredientInline(AjaxSelectAdminTabularInline):
@@ -56,7 +91,7 @@ class RecipeImageInline(admin.TabularInline):
     extra = 1
 
 class RecipeAdmin(AjaxSelectAdmin):
-    exclude = ('url',)
+    exclude = ('url', 'energy', 'protein', 'fat', 'carbohydrate')
     fields = ('generate_url', 'title', 'status', 'category', 'time', 'weight', 'image', 'tags', 'description')
     inlines = [
         RecipeIngredientInline,
@@ -75,8 +110,16 @@ class RecipeAdmin(AjaxSelectAdmin):
                     instance.weight = int(instance.quantity * ingredient_unit.ratio)
         formset.save()
     def save_model(self, request, obj, form, change):
-        obj.fix_url();
+        obj.fix_url()
+        super().save_model(request, obj, form, change)
+        obj.calculate()
         obj.save()
+        obj.count_tags()
+    def delete_model(request, obj):
+        obj.status = u'i'
+        obj.save()
+        obj.count_tags()
+        super(RecipeAdmin, self).save_model(request, obj)
     def generate_url(self, obj):
         if not obj.url:
             return '???'
@@ -86,7 +129,7 @@ class RecipeAdmin(AjaxSelectAdmin):
 admin.site.register(
     Recipe,
     RecipeAdmin,
-    list_display = ('admin_thumbnail', 'title', 'status', 'has_roughly', 'category', 'recipe_tags', 'recipe_ingredients'),
+    list_display = ('admin_thumbnail', 'title', 'status', 'fullness', 'category', 'recipe_tags', 'recipe_ingredients'),
     list_display_links = ['title'],
     search_fields = ['title'],
     list_filter = ['category', 'tags', 'recipeingredient__ingredient__name'],
