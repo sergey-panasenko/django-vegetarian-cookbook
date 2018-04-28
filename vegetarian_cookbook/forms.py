@@ -8,7 +8,7 @@ from django import forms
 from django.utils.html import format_html
 from django.urls import reverse
 
-from .models import RecipeIngredient, Unit, IngredientUnit
+from .models import Recipe, RecipeIngredient, Unit, IngredientUnit
 
 class RecipeIngredientInlineForm(ModelForm):
 
@@ -35,3 +35,11 @@ class RecipeIngredientInlineForm(ModelForm):
         model = RecipeIngredient
         exclude = []
 
+
+class RecipeForm(ModelForm):
+
+    tags = make_ajax_field(Recipe, 'tags', 'Tag', show_help_text=False, required=False)
+
+    class Meta:
+        model = Recipe
+        exclude = []

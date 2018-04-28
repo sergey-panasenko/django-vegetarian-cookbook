@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'vegetarian_cookbook',
     'bootstrap4',
+    'ajaximage',
     'imagekit',
     'tinymce',
     'ajax_select',
@@ -124,6 +125,10 @@ USE_L10N = True
 USE_TZ = True
 
 
+DECIMAL_SEPARATOR = '.'
+
+RECIPES_IN_LIST = 9
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
@@ -167,33 +172,5 @@ TINYMCE_DEFAULT_CONFIG = {
     "Wingdings=wingdings,zapf dingbats",}
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = False
-
-BOOTSTRAP4 = {
-    'error_css_class': 'bootstrap4-error',
-    'required_css_class': 'bootstrap4-required',
-    'javascript_in_head': True,
-    'css_url': {
-        'href': STATIC_URL + 'css/bootstrap.min.css',
-        'integrity': 'sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm',
-        'crossorigin': 'anonymous',
-    },
-    'theme_url': None,
-    'jquery_url': {
-        'url': STATIC_URL + 'js/jquery-3.2.1.slim.min.js',
-        'integrity': 'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN',
-        'crossorigin': 'anonymous',
-    },
-    'popper_url': {
-        'url': STATIC_URL + 'js/popper.min.js',
-        'integrity': 'sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q',
-        'crossorigin': 'anonymous',
-
-    },
-    'javascript_url': {
-        'url': STATIC_URL + 'js/bootstrap.min.js',
-        'integrity': 'sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl',
-        'crossorigin': 'anonymous',
-    },
-}
 
 

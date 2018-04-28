@@ -6,6 +6,8 @@
 
 {% block bootstrap4_extra_head %}
 <title>{{ recipe.title }}</title>
+<meta name="description" content="{{ seo_description }}">
+<meta name="keywords" content="{{ seo_keywords }}">
 <link href="{% static 'vegetarian_cookbook/lightbox2/css/lightbox.css' %}" rel="stylesheet">
 {% endblock %}
 
@@ -59,11 +61,11 @@
                     </div>
                 {% endif %}
                 {% if recipe.time %}
-                    <p class="mt-3 ml-1">
-                        <img style="width:20px" src="{% static 'vegetarian_cookbook/img/time.png' %}">
-                        <span class="ml-1"> {{ recipe.time }} {% trans "min" %}</span>
-                    </p>
+                    {% recipe_cooking_time recipe.time  %}
                 {% endif %}
+                <div class="recipe__сomplexity my-2">
+                    {% trans 'Complexity:' %} {{ recipe.get_сomplexity_display }}
+                </div>
                 <div class="recipe__energy_nutrients__wrapper">
                     {% recipe_energy_nutrients 80 True recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
                 </div>
@@ -80,12 +82,12 @@
                             </td>
                             <td class="p-2">
                                 {% if ri.quantity %}
-                                    {{ ri.quantity | floatformat:"1" }}
+                                    {{ ri.quantity | human_float:"1"}}
                                     {{ ri.unit.name }}
-                                    ({{ ri.weight | floatformat:"0"}}
+                                    ({{ ri.weight | human_float:"0"}}
                                     {% trans "gr" %})
                                 {% else %}
-                                    {{ ri.weight | floatformat:"0"}}
+                                    {{ ri.weight | human_float:"0"}}
                                     {% trans "gr" %}
                                 {% endif %}
                                 {% if ri.roughly %}
@@ -124,7 +126,7 @@
             import recipe
             ingredients = []
             {% for ri in recipe.recipeingredient_set.all %}
-            ingredients.append( recipe.Ingredient( {{ ri.ingredient.id }}, "{{ ri.weight }}", "{{ ri.ingredient.energy }}" , "{{ ri.ingredient.protein }}" , "{{ ri.ingredient.fat }}" , "{{ ri.ingredient.carbohydrate }}" ))
+            ingredients.append( recipe.Ingredient( {{ ri.id }}, {{ ri.ingredient.id }}, "{{ ri.weight }}", "{{ ri.ingredient.energy }}" , "{{ ri.ingredient.protein }}" , "{{ ri.ingredient.fat }}" , "{{ ri.ingredient.carbohydrate }}" ))
             {% endfor %}
             window.recipe = recipe.Recipe( {{ recipe.id }}, ingredients, {{ recipe.weight }});
         </script>
@@ -158,7 +160,7 @@
                             </tr>
                         </thead>
                     {% for ri in recipe.recipeingredient_set.all %}
-                        <tr class="js_recipe_ingredient js_recipe_ingredient-{{ ri.ingredient.id }}" data-id="{{ ri.ingredient.id }}">
+                        <tr class="js_recipe_ingredient js_recipe_ingredient-{{ ri.id }}" data-id="{{ ri.id }}">
                             <td class="align-middle">
                                 {{ ri.ingredient.name }}
                             </td>
@@ -181,7 +183,7 @@
                                 --
                             </td>
                             <td class="align-middle text-right table-warning">
-                                {{ ri.ingredient.energy | floatformat:"0" }}
+                                {{ ri.ingredient.energy | human_float:"0" }}
                             </td>
                         </tr>
                     {% endfor %}

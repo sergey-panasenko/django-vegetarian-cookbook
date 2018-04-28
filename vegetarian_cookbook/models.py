@@ -3,7 +3,7 @@
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
+from ajaximage.fields import AjaxImageField
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from tinymce.models import HTMLField
@@ -60,6 +60,7 @@ class IngredientNutritionalValue(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT, verbose_name=_('ingredient'))
     nutrient = models.ForeignKey(Nutrient, on_delete=models.CASCADE, verbose_name=_('nutrient'))
     value = models.DecimalField(default=1, max_digits=10, decimal_places=3, verbose_name=_('value'))
+    unit = models.ForeignKey(Unit, default=1, on_delete=models.PROTECT, verbose_name=_('unit'))
     def __str__(self):
         return self.ingredient.name + '/' + self.nutrient.name
     class Meta:
@@ -96,18 +97,24 @@ class Recipe(models.Model):
         (u'd', _('draft')),
         (u'i', _('idea')),
     )
-    title = models.CharField(max_length=250, verbose_name=_('title'))
+    COMPLEXITY_CHOICES = (
+        (1, _('еasy')),
+        (2, _('medium')),
+        (3, _('hard')),
+    )
+    title = models.CharField(max_length=250, verbose_name=_('title'), unique=True)
     url = models.CharField(max_length=250, default='', unique=True, blank=True, verbose_name=_('recipe url'))
     status = models.CharField(max_length=2, default=u'i', choices=STATUS_CHOICES, verbose_name=_('status'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('category'))
+    сomplexity = models.IntegerField(default=1, choices=COMPLEXITY_CHOICES, verbose_name=_('сomplexity'))
     description = HTMLField(blank=True, verbose_name=_('description'))
-    time = models.IntegerField(default=0, null=True, blank=True, verbose_name=_('time'))
-    weight = models.IntegerField(default=0, blank=True, verbose_name=_('weight'))
+    time = models.IntegerField(default=0, null=True, blank=True, verbose_name=_('time'), help_text=_("Total time for cooking, in minutes"))
+    weight = models.IntegerField(default=0, blank=True, verbose_name=_('weight'), help_text=_("Weight after cooking, in grams"))
     energy = models.DecimalField(max_digits=7, decimal_places=3, null=True, blank=True, verbose_name=_('energy'))
     protein = models.DecimalField(max_digits=7, decimal_places=3, null=True, blank=True, verbose_name=_('protein'))
     fat = models.DecimalField(max_digits=7, decimal_places=3, null=True, blank=True, verbose_name=_('fat'))
     carbohydrate = models.DecimalField(max_digits=7, decimal_places=3, null=True, blank=True, verbose_name=_('carbohydrate'))
-    image = models.ImageField(null=True, blank=True, upload_to='images', verbose_name=_('image'))
+    image = AjaxImageField(null=True, blank=True, upload_to='images', max_width=1024, max_height=768, crop=True, verbose_name=_('image'))
     thumbnail = ImageSpecField(source='image',
           processors=[ResizeToFill(400, 300)],
           format='JPEG',
@@ -180,9 +187,9 @@ class Recipe(models.Model):
         for i in self.recipeingredient_set.all():
             ingredients.append(i.ingredient.name)
         return ', '.join(ingredients[0:3])
+    recipe_ingredients.short_description = _('ingredients')
     def fix_url(self):
         self.url = transliterate(self.title)
-    recipe_ingredients.short_description = _('ingredients')
     def has_roughly(self):
         hr = False
         for i in self.recipeingredient_set.all():
@@ -210,12 +217,14 @@ class RecipeIngredient(models.Model):
 
 class RecipeImage(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name=_('recipe'))
-    image = models.ImageField(upload_to='images', verbose_name=_('image'))
+    image = AjaxImageField(null=True, blank=True, upload_to='images', max_width=1024, max_height=768, crop=True, verbose_name=_('image'))
     thumbnail = ImageSpecField(source='image',
           processors=[ResizeToFill(400, 300)],
           format='JPEG',
           options={'quality': 90})
     title = models.CharField(max_length=250, blank=True, verbose_name=_('title'))
+    def __str__(self):
+        return _('image') + '-' + str(self.id)
     class Meta:
         verbose_name=_('image')
         verbose_name_plural=_('images')

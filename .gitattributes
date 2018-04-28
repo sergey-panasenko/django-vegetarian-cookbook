@@ -1,0 +1,2 @@
+*.py linguist-language=Python
+vegetarian_cookbook/static/* linguist-vendored

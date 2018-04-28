@@ -1,5 +1,6 @@
 from django import template
 from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from vegetarian_cookbook.models import Category
 register = template.Library()
 
@@ -15,9 +16,22 @@ def categories_icons(a_class):
 
 @register.inclusion_tag('vegetarian_cookbook/templatetags/ingredients_list.html')
 def ingredients_list(number_of_displayed, ingredients):
-    if len(ingredients) <= number_of_displayed:
-        return {'ingredients': ingredients, 'more': 0}
-    return {'ingredients': ingredients[0:number_of_displayed - 1], 'more': len(ingredients) - number_of_displayed + 1}
+    lenght = len(ingredients)
+    more = lenght > number_of_displayed
+    return {
+        'ingredients': ingredients[0:number_of_displayed - 1] if more else ingredients,
+        'more': lenght - number_of_displayed + 1 if more else 0,
+        'empty_row': range(0 if more else number_of_displayed - lenght)
+    }
+
+@register.inclusion_tag('vegetarian_cookbook/templatetags/range_slider.html')
+def range_slider(**kwargs):
+    return kwargs
+
+@register.inclusion_tag('vegetarian_cookbook/templatetags/paginator.html')
+def paginator(data):
+    return {'data':data}
+
 
 @register.inclusion_tag('vegetarian_cookbook/templatetags/recipe_energy_nutrients.html')
 def recipe_energy_nutrients(size, show_legend, energy, protein, fat, carbohydrate):
@@ -45,3 +59,28 @@ def recipe_energy_nutrients(size, show_legend, energy, protein, fat, carbohydrat
         'v3': int(carbohydrate * supernumber / 100),
         'n': supernumber,
     }
+
+@register.inclusion_tag('vegetarian_cookbook/templatetags/recipe_cooking_time.html')
+def recipe_cooking_time(time):
+    hours = 0
+    minutes = time
+    angle = int(round(time * 6))
+    if time >= 60:
+        hours = int((time - time % 60) / 60)
+        minutes = time % 60
+        angle = int(round(time / 2))
+    return {
+        'hours': hours,
+        'minutes': minutes,
+        'angle': angle
+    }
+
+@register.filter
+def human_float(value, decimal = False):
+    if decimal == False:
+        return ('%f' % value).rstrip('0').rstrip('.')
+    n = pow(10, int(decimal))
+    if int(value * n) == int(value) * n:
+        return int(round(value))
+    else:
+        return ("%0." + str(decimal) + 'f') % value

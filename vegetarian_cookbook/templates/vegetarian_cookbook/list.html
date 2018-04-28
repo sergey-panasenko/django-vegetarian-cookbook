@@ -5,68 +5,83 @@
 
 {% block bootstrap4_extra_head %}
 <title>{{ title }}</title>
+<meta name="description" content="{{ seo_description }}">
+<meta name="keywords" content="{{ seo_keywords }}">
 {% endblock %}
 
 {% block bootstrap4_content %}
 
 <div class="container">
-
     <main role="main">
-
-      <section class="jumbotron text-center">
-        <div class="container">
-          <h1 class="jumbotron-heading">{{ title }}</h1>
+        <div class="recipe-list_title recipe-bg text-center">
+          <h1 class="text-primary">{{ title }}</h1>
         </div>
-      </section>
-
-      <div class="py-5 bg-light">
-        <div class="container">
-
-          <div class="row">
-            {% for recipe in recipes %}
-            <div class="col-md-4">
-                <div class="card mb-4 box-shadow">
-                  <div class="recipe__card_category position-absolute m-2">
-                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='{% url 'recipes_category' recipe.category.name %}'" title="{{ recipe.category.name }}">
-                        {% if recipe.category.image %}
-                            <img style="width:32px" src="{{recipe.category.image.url }}">
-                        {% else %}
-                            {{ recipe.category.name }}
-                        {% endif %}
-                    </button>
-                </div>
-                <a href="{% url 'recipes_recipe' recipe.url %}">
-                    <img class="card-img-top" src="{{recipe.thumbnail.url }}" alt="{{ recipe.title }}">
-                </a>
-                <div class="card-body position-relative">
-                    <div class="position-absolute" style="top:-80px; z-index:3">
-                        {% recipe_energy_nutrients 60 False recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
+        <div class="recipe-bg">
+            {% paginator recipes %}
+            <div class="row recipe-list">
+                {% for recipe in recipes %}
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <div class="recipe__card_category position-absolute m-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='{% url 'recipes_category' recipe.category.name %}'" title="{{ recipe.category.name }}">
+                                {% if recipe.category.image %}
+                                    <img style="width:32px" src="{{recipe.category.image.url }}">
+                                {% else %}
+                                    {{ recipe.category.name }}
+                                {% endif %}
+                            </button>
+                        </div>
+                        <div class="recipe__card_image">
+                            <a href="{% url 'recipes_recipe' recipe.url %}">
+                                {% if recipe.thumbnail %}
+                                    <img class="card-img-top" src="{{recipe.thumbnail.url }}" alt="{{ recipe.title }}">
+                                {% else %}
+                                    <img class="card-img-top" src="{% static 'vegetarian_cookbook/img/default.jpg' %}" alt="{{ recipe.title }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="card-body position-relative">
+                            <div class="сomplexity сomplexity-{{recipe.сomplexity}}" title="{% trans 'Complexity:' %} {{ recipe.get_сomplexity_display }}">
+                                <div class="сomplexity-circle сomplexity-circle-1"></div>
+                                <div class="сomplexity-circle сomplexity-circle-2"></div>
+                                <div class="сomplexity-circle сomplexity-circle-3"></div>
+                            </div>
+                            <div class="px-2">
+                                <div class="row">
+                                    <div class="col col-9 p-1">
+                                        <a href="{% url 'recipes_recipe' recipe.url %}">
+                                            <h6 class="mb-1">
+                                                {{ recipe.title }}
+                                            </h6>
+                                        </a>
+                                    </div>
+                                    <div class="col col-3 p-0">
+                                        <div style="width:60px;" class="float-right">
+                                            {% recipe_energy_nutrients 60 False recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% ingredients_list 5 recipe.recipeingredient_set.all %}
+                            <div class="justify-content-between align-items-center overflow-hidden">
+                                <div class="btn-group">
+                                    {% if recipe.tags.all %}
+                                        {% for rt in recipe.tags.all|slice:":3" %}
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='{% url 'recipes_tags' rt.name %}'">{{ rt.name }}</button>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="block-inline py-1">&nbsp;</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <a href="{% url 'recipes_recipe' recipe.url %}">
-                        <h6 class="text-center mb-1">
-                            {{ recipe.title }}
-                        </h6>
-                    </a>
-                    {% ingredients_list 5 recipe.recipeingredient_set.all %}
-                    <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group overflow-hidden">
-                        {% for rt in recipe.tags.all|slice:":3" %}
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='{% url 'recipes_tags' rt.name %}'">{{ rt.name }}</button>
-                        {% endfor %}
-
-                    </div>
-                  </div>
                 </div>
-              </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-
-          </div>
+            {% paginator recipes %}
         </div>
-      </div>
-
     </main>
-
 </div>
 
 {% endblock %}

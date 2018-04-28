@@ -51,9 +51,10 @@
                     <a class="nav-link" href="{% url 'recipe_tags_ingredients' %}">{% trans "Tags &amp; Ingredients" %}</a>
                   </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                  <input class="form-control mr-sm-2" type="search" placeholder="{% trans 'Search' %}" aria-label="Search">
-                  <button class="btn btn-secondary my-2 my-sm-0" type="submit">{% trans "Search" %}</button>
+                <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'recipes_search' %}">
+                    {% csrf_token %}
+                    <input name="query" class="form-control mr-sm-2" type="search" placeholder="{% trans 'Search' %}" aria-label="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">{% trans "Search" %}</button>
                 </form>
             </div>
             <div class="pos-f-t">
@@ -89,10 +90,10 @@
                         Vegetarian Cookbook &copy; 2017
                         <small>
                             {% with url='https://creativecommons.org/licenses/by-sa/2.0/' %}
-                            {% blocktrans %}All materials of the site are distributed under the terms of the license <a href="{{ url }}">CC-BY-SA</a>
-                            {% endblocktrans %}
+                                {% blocktrans %}All materials of the site are distributed under the terms of the license <a href="{{ url }}">CC-BY-SA</a>
+                                {% endblocktrans %}
+                            {% endwith %}
                         </small>
-                        {% endwith %}
                         {% with url='https://github.com/sergey-panasenko/django-vegetarian-cookbook' %}
                         {% blocktrans %}based on <a href="{{ url }}">Django Vegetarian Cookbook</a>{% endblocktrans %}
                         {% endwith %}

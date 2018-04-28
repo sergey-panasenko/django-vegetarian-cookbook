@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load vegetarian_cookbook_tags %}
 
 <div class="recipe_energy_nutrients" style=" height:{{ size }}px;">
     <div class="recipe_energy_nutrients_svg" style="width:{{ size }}px; height:{{ size }}px;">
@@ -11,7 +12,7 @@
             <text x = "50" y = "72" font-size = "20" text-anchor="middle" fill="#555">{% trans "kCal" %}</text>
         </svg>
     </div>
-    <div class="recipe_energy_nutrients_legend" style="left:{{ size }}px; height:{{ size }}px; {% if show_legend %} display:block {% endif %}">
+    <div class="recipe_energy_nutrients_legend" style="left:{{ size }}px; {% if show_legend %} display:block {% endif %}">
         <div class="p-1">
             <table class="">
                 <tr>
@@ -22,7 +23,7 @@
                         {% trans "Protein" %}:
                     </td>
                     <td class="text-right">
-                        {{ protein |floatformat:"1"}} {% trans "gr" %}
+                        {{ protein | human_float:"1"}} {% trans "gr" %}
                     </td>
                 </tr>
                 <tr class="">
@@ -33,7 +34,7 @@
                         {% trans "Fat" %}:
                     </td>
                     <td class="text-right">
-                        {{ fat |floatformat:"1"}} {% trans "gr" %}
+                        {{ fat | human_float:"1"}} {% trans "gr" %}
                     </td>
                 </tr>
                 <tr>
@@ -44,7 +45,7 @@
                         {% trans "Carbohydrate" %}:
                     </td>
                     <td class="text-right">
-                        {{ carbohydrate |floatformat:"1"}} {% trans "gr" %}
+                        {{ carbohydrate | human_float:"1"}} {% trans "gr" %}
                     </td>
                 </tr>
             </table>

@@ -36,6 +36,18 @@
                 <div class="ingredient__energy_nutrients__wrapper mt-3">
                     {% recipe_energy_nutrients 80 True ingredient.energy ingredient.protein ingredient.fat ingredient.carbohydrate  %}
                 </div>
+                <div class="ingredient__nutrient mt-3">
+                    {% for nutrient in ingredient.ingredientnutritionalvalue_set.all %}
+                        <div class="row p-3">
+                            <div class="col col-10 p-1 text-overflow-ellipsis">
+                                {{ nutrient.nutrient.name }}
+                            </div>
+                            <div class="col col-2 p-1 text-right text-nowrap">
+                                {{ nutrient.value | human_float }} {{ nutrient.unit }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="col col-12 col-md-6 col-lg-8">
                 {% if ingredient.description %}
