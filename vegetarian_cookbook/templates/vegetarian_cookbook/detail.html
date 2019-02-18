@@ -8,7 +8,12 @@
 <title>{{ recipe.title }}</title>
 <meta name="description" content="{{ seo_description }}">
 <meta name="keywords" content="{{ seo_keywords }}">
+<meta property="og:title" content="{{ recipe.title }}" />
+{% if recipe.image %}
+    <meta property="og:image" content="{{recipe.thumbnail.url }}" />
+{% endif %}
 <link href="{% static 'vegetarian_cookbook/lightbox2/css/lightbox.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block bootstrap4_content %}
@@ -63,8 +68,8 @@
                 {% if recipe.time %}
                     {% recipe_cooking_time recipe.time  %}
                 {% endif %}
-                <div class="recipe__сomplexity my-2">
-                    {% trans 'Complexity:' %} {{ recipe.get_сomplexity_display }}
+                <div class="recipe__сomplexity my-2" style="vertical-align:middle">
+                    <img width="20" class="mr-1" src="{% static 'vegetarian_cookbook/img/icon_complexity.png' %}"> {{ recipe.get_сomplexity_display }}
                 </div>
                 <div class="recipe__energy_nutrients__wrapper">
                     {% recipe_energy_nutrients 80 True recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
@@ -83,7 +88,7 @@
                             <td class="p-2">
                                 {% if ri.quantity %}
                                     {{ ri.quantity | human_float:"1"}}
-                                    {{ ri.unit.name }}
+                                    {% plural_form ri.unit ri.quantity %}
                                     ({{ ri.weight | human_float:"0"}}
                                     {% trans "gr" %})
                                 {% else %}

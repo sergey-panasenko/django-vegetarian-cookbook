@@ -49,7 +49,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -139,6 +138,7 @@ STATIC_URL = '/static/'
 ADMIN_TOOLS_MEDIA_URL = '/static/'
 ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, "admin/")
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, 'static'),)
+LOCALE_PATHS = (os.path.join(PROJECT_ROOT, 'locale'),)
 
 
 TINYMCE_DEFAULT_CONFIG = {

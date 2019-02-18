@@ -1,4 +1,5 @@
-# Django Vegetarian Cookbook, Copyright © 2018 Sergey Panasenko. Contacts: <sergey.panasenko@gmail.com>
+# Django Vegetarian Cookbook, Copyright © 2018 Sergey Panasenko.
+# Contacts: <sergey.panasenko@gmail.com>
 # License: https://opensource.org/licenses/AGPL-3.0
 
 from django.contrib import admin
@@ -7,44 +8,37 @@ from django.utils.html import format_html
 from django.urls import reverse
 from imagekit.admin import AdminThumbnail
 from ajax_select import make_ajax_form
-from ajax_select.admin import AjaxSelectAdmin, AjaxSelectAdminTabularInline, AjaxSelectAdminStackedInline
+from ajax_select.admin import AjaxSelectAdmin, AjaxSelectAdminTabularInline
 from django.core.exceptions import ValidationError
 from functools import partial
 
-from .models import Nutrient, Unit, Ingredient, IngredientUnit, IngredientNutritionalValue, Category, Tag, Recipe, RecipeIngredient, RecipeImage
+from .models import Nutrient, Unit, Ingredient, IngredientUnit
+from .models import IngredientNutritionalValue, Category, Tag, Recipe
+from .models import RecipeIngredient, RecipeImage
 from .forms import RecipeForm, RecipeIngredientInlineForm
 
 admin.site.site_header = _('My recipes')
 
 admin.site.register(Nutrient)
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     admin_thumbnail = AdminThumbnail(image_field='thumbnail')
     admin_thumbnail.short_description = _('Thumbnail')
+    list_display = ('admin_thumbnail', 'name')
+    list_display_links = ['name']
 
-admin.site.register(
-    Category,
-    CategoryAdmin,
-    list_display = ('admin_thumbnail', 'name'),
-    list_display_links = ['name'],
-)
-
-
+@admin.register(Unit)
 class UnitAdmin(AjaxSelectAdmin):
     pass
 
-admin.site.register(Unit,UnitAdmin)
-
+@admin.register(Tag)
 class TagAdmin(AjaxSelectAdmin):
     readonly_fields = ('counter',)
+    list_display = ('name', 'counter')
     def get_ordering(self, request):
         return ['name']
 
-admin.site.register(
-    Tag,
-    TagAdmin,
-    list_display = ('name', 'counter'),
-)
 
 class IngredientUnitInline(AjaxSelectAdminTabularInline):
     model = IngredientUnit
@@ -55,10 +49,16 @@ class IngredientNutritionalValueInline(AjaxSelectAdminTabularInline):
     form = make_ajax_form(IngredientNutritionalValue, {'nutrient': 'Nutrient'})
     extra = 0
 
+@admin.register(Ingredient)
 class IngredientAdmin(AjaxSelectAdmin):
+    list_display = ('admin_thumbnail', 'name', 'generate_url', 'energy',
+                    'protein', 'fat', 'carbohydrate')
+    list_display_links = ['name']
+    search_fields = ['name']
     admin_thumbnail = AdminThumbnail(image_field='thumbnail')
     admin_thumbnail.short_description = _('Thumbnail')
-    fields = ('generate_url', 'name', 'image', 'description', 'energy', 'protein', 'fat', 'carbohydrate')
+    fields = ('generate_url', 'name', 'image', 'description',
+                'energy', 'protein', 'fat', 'carbohydrate')
     readonly_fields = ('generate_url',)
     inlines = [
         IngredientUnitInline,
@@ -71,16 +71,9 @@ class IngredientAdmin(AjaxSelectAdmin):
     def generate_url(self, obj):
         if not obj.name:
             return '???'
-        return format_html('<a href="{}" target="_blank">{}</a>', reverse('recipes_ingredient', args=(obj.name,)), obj.name)
+        return format_html('<a href="{}" target="_blank">{}</a>',
+                    reverse('recipes_ingredient', args=(obj.name,)), obj.name)
     generate_url.short_description = _('Url')
-
-admin.site.register(
-    Ingredient,
-    IngredientAdmin,
-    list_display = ('admin_thumbnail', 'name', 'generate_url', 'energy', 'protein', 'fat', 'carbohydrate'),
-    list_display_links = ['name'],
-    search_fields = ['name']
-)
 
 
 class RecipeIngredientInline(AjaxSelectAdminTabularInline):
@@ -92,15 +85,31 @@ class RecipeIngredientInline(AjaxSelectAdminTabularInline):
         return _('OR')
     or_col.short_description = ''
 
-
 class RecipeImageInline(admin.TabularInline):
     model = RecipeImage
     extra = 1
 
+@admin.register(Recipe)
 class RecipeAdmin(AjaxSelectAdmin):
     form = RecipeForm
-    exclude = ('url', 'energy', 'protein', 'fat', 'carbohydrate')
-    fields = ('generate_url', 'title', 'status', 'сomplexity', 'category', 'time', 'weight', 'image', 'tags', 'description')
+    list_display = ('admin_thumbnail', 'title', 'status_url', 'fullness',
+                        'category', 'recipe_tags', 'recipe_ingredients')
+    list_display_links = ['title']
+    search_fields = ['title']
+    list_filter = ['category', 'tags', 'recipeingredient__ingredient__name']
+    exclude = ('url', 'energy', 'protein', 'fat', 'carbohydrate', 'weight')
+    fieldsets = (
+        (None, {
+            'fields': ('generate_url', 'title', 'status', 'сomplexity',
+                        'category', 'time', 'image', 'tags', 'description')
+        }),
+        ('Manual setting', {
+            'classes': ('collapse',),
+            'fields': ( 'manually_weight', 'manually_energy',
+                        'manually_protein', 'manually_fat',
+                        'manually_carbohydrate'),
+        }),
+    )
     inlines = [
         RecipeIngredientInline,
         RecipeImageInline
@@ -113,8 +122,11 @@ class RecipeAdmin(AjaxSelectAdmin):
             for form in formset.forms:
                 instance = form.instance
                 if instance.quantity > 0 and instance.unit:
-                    ingredient_unit = IngredientUnit.objects.get(unit=instance.unit, ingredient=instance.ingredient)
-                    instance.weight = int(instance.quantity * ingredient_unit.ratio)
+                    ingredient_unit = IngredientUnit.objects.get(
+                            unit=instance.unit,
+                            ingredient=instance.ingredient)
+                    instance.weight = int(instance.quantity * \
+                                            ingredient_unit.ratio)
         if formset.model == RecipeImage:
             for form in formset.forms:
                 instance = form.instance
@@ -144,19 +156,15 @@ class RecipeAdmin(AjaxSelectAdmin):
     def generate_url(self, obj):
         if not obj.url:
             return '???'
-        return format_html('<a href="{}" target="_blank">{}</a>', reverse('recipes_recipe', args=(obj.url,)), reverse('recipes_recipe', args=(obj.url,)))
+        return format_html('<a href="{}" target="_blank">{}</a>',
+                                reverse('recipes_recipe', args=(obj.url,)),
+                                reverse('recipes_recipe', args=(obj.url,)))
     generate_url.short_description = _('Url')
     def status_url(self, obj):
         if not obj.url:
             return obj.get_status_display()
-        return format_html('<a href="{}" target="_blank">{}</a>', reverse('recipes_recipe', args=(obj.url,)), obj.get_status_display())
+        return format_html('<a href="{}" target="_blank">{}</a>',
+                            reverse('recipes_recipe', args=(obj.url,)),
+                            obj.get_status_display())
     status_url.short_description = _('status')
 
-admin.site.register(
-    Recipe,
-    RecipeAdmin,
-    list_display = ('admin_thumbnail', 'title', 'status_url', 'fullness', 'category', 'recipe_tags', 'recipe_ingredients'),
-    list_display_links = ['title'],
-    search_fields = ['title'],
-    list_filter = ['category', 'tags', 'recipeingredient__ingredient__name'],
-)

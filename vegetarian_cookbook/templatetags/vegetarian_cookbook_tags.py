@@ -1,7 +1,10 @@
 from django import template
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
+
+from vegetarian_cookbook import appsettings
 from vegetarian_cookbook.models import Category
+
 register = template.Library()
 
 @register.inclusion_tag('vegetarian_cookbook/templatetags/categories_list.html')
@@ -84,3 +87,27 @@ def human_float(value, decimal = False):
         return int(round(value))
     else:
         return ("%0." + str(decimal) + 'f') % value
+
+
+@register.simple_tag
+def plural_form(value, n):
+    if not value.plural:
+        return value.name
+    try:
+        nplurals = appsettings.NPLURALS
+        plural = appsettings.PLURAL
+        plurals_array = value.plural.split(',')
+        if nplurals == 2:
+            return value.name if n == 1 else value.plural
+        if int(n * 100) != int(n) *100:
+            return plurals_array[0]  #??? only for ru?
+        n = int(n)
+        plural = plural.replace('\bn\b', str(n))
+        key = eval(plural)
+        return plurals_array[key-1]
+
+    except Exception:
+        return value.name if n == 1 else value.plural
+
+
+

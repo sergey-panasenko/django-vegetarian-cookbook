@@ -1,6 +1,8 @@
-# Copyright © 2018 Sergey Panasenko. Contacts: <sergey.panasenko@gmail.com>
+# Django Vegetarian Cookbook, Copyright © 2018 Sergey Panasenko.
+# Contacts: <sergey.panasenko@gmail.com>
 # License: https://opensource.org/licenses/AGPL-3.0
 
+import math
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.template import Context
@@ -9,26 +11,25 @@ from django.utils.translation import gettext as _
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
-from . import appsettings
-import math
 
-from .models import Recipe, Category, Tag, Ingredient
+from vegetarian_cookbook import appsettings
+from vegetarian_cookbook.models import Recipe, Category, Tag, Ingredient
 
 def index(request, page = 1):
     recipes_list = Recipe.objects.all().filter(status=u'P').order_by('-id')
     try:
-        paginator = Paginator(recipes_list, appsettings.recipes_in_list)
+        paginator = Paginator(recipes_list, appsettings.RECIPES_IN_LIST)
         recipes = paginator.page(page)
     except PageNotAnInteger:
         recipes = paginator.page(1)
     except EmptyPage:
-        recipes = paginator.page(paginator.num_pages)
+        raise Http404("Not correct page number")
     recipes.base_url = ''
     return render(request, 'vegetarian_cookbook/list.html', {
         'recipes': recipes,
         'title': _('All recipes'),
-        'seo_description': appsettings.seo_description,
-        'seo_keywords': appsettings.seo_keywords,
+        'seo_description': appsettings.SEO_DESCRIPTION,
+        'seo_keywords': appsettings.SEO_KEYWORDS,
     })
 
 def detail(request, recipe_name):
@@ -42,15 +43,16 @@ def detail(request, recipe_name):
         raise Http404("Recipe does not exist")
     return render(request, 'vegetarian_cookbook/detail.html', {
         'recipe': recipe,
-        'seo_description': appsettings.seo_description + recipe.title,
-        'seo_keywords': recipe.recipe_tags() + ', ' + appsettings.seo_keywords,
+        'seo_description': recipe.recipe_ingredients(20, False, True),
+        'seo_keywords': recipe.recipe_tags() + ', ' + appsettings.SEO_KEYWORDS,
     })
 
 def tags(request, tags, page = 1):
     tags_list = tags.split(",");
-    recipes_list = Recipe.objects.all().filter(Q(tags__name__in=tags_list), status=u'P').distinct().order_by('-id')
+    recipes_list = Recipe.objects.all().filter(Q(tags__name__in=tags_list),
+                                status=u'P').distinct().order_by('-id')
     try:
-        paginator = Paginator(recipes_list, appsettings.recipes_in_list)
+        paginator = Paginator(recipes_list, appsettings.RECIPES_IN_LIST)
         recipes = paginator.page(page)
     except PageNotAnInteger:
         recipes = paginator.page(1)
@@ -60,16 +62,18 @@ def tags(request, tags, page = 1):
     return render(request, 'vegetarian_cookbook/list.html', {
         'recipes': recipes,
         'title': _('Tags: %(tags)s.') % {'tags': tags},
-        'seo_description': appsettings.seo_description + _('Tags: %(tags)s.') % {'tags': tags} ,
-        'seo_keywords': tags + ', ' + appsettings.seo_keywords,
+        'seo_description': appsettings.SEO_DESCRIPTION + \
+                        _('Tags: %(tags)s.') % {'tags': tags} ,
+        'seo_keywords': tags + ', ' + appsettings.SEO_KEYWORDS,
     })
 
 
 def category(request, category_name, page = 1):
     try:
         category = Category.objects.get(name=category_name)
-        recipes_list = Recipe.objects.all().filter(category=category.id, status=u'P').order_by('-id')
-        paginator = Paginator(recipes_list, appsettings.recipes_in_list)
+        recipes_list = Recipe.objects.filter(category=category.id,
+                                        status=u'P').order_by('-id')
+        paginator = Paginator(recipes_list, appsettings.RECIPES_IN_LIST)
         recipes = paginator.page(page)
     except PageNotAnInteger:
         recipes = paginator.page(1)
@@ -81,21 +85,23 @@ def category(request, category_name, page = 1):
     return render(request, 'vegetarian_cookbook/list.html', {
         'recipes': recipes,
         'title': _('Category: %(category)s.') % {'category': category.name},
-        'seo_description': appsettings.seo_description + _('Category: %(category)s.') % {'category': category.name},
-        'seo_keywords': category_name + ', ' + appsettings.seo_keywords,
+        'seo_description': appsettings.SEO_DESCRIPTION + \
+         _('Category: %(category)s.') % {'category': category.name},
+        'seo_keywords': category_name + ', ' + appsettings.SEO_KEYWORDS,
     })
 
 def ingredient(request, ingredient_name):
     try:
         ingredient = Ingredient.objects.get(name=ingredient_name)
-        recipes = Recipe.objects.all().filter(Q(recipeingredient__ingredient__id=ingredient.id), status=u'P')
+        recipes = Recipe.objects.all().filter(
+                Q(recipeingredient__ingredient__id=ingredient.id), status=u'P')
     except Recipe.DoesNotExist:
         raise Http404("Ingredient does not exist")
     return render(request, 'vegetarian_cookbook/ingredient.html', {
         'ingredient': ingredient,
         'recipes': recipes,
-        'seo_description': appsettings.seo_description + ingredient_name,
-        'seo_keywords': ingredient_name + ', ' + appsettings.seo_keywords,
+        'seo_description': appsettings.SEO_DESCRIPTION + ingredient_name,
+        'seo_keywords': ingredient_name + ', ' + appsettings.SEO_KEYWORDS,
     })
 
 def tags_ingredients(request, page = 1):
@@ -105,7 +111,8 @@ def tags_ingredients(request, page = 1):
     if search !='':
         ingredients_list = ingredients_list.filter(name__icontains=search)
     try:
-        paginator = Paginator(ingredients_list.order_by('name'), appsettings.ingredients_in_list)
+        paginator = Paginator(ingredients_list.order_by('name'),
+                                appsettings.INGREDIENTS_IN_LIST)
         ingredients = paginator.page(page)
     except PageNotAnInteger:
         ingredients = paginator.page(1)
@@ -117,8 +124,8 @@ def tags_ingredients(request, page = 1):
         'search':search,
         'ingredients': ingredients,
         'title': _("Tags & Ingredients"),
-        'seo_description': appsettings.seo_description,
-        'seo_keywords': appsettings.seo_keywords,
+        'seo_description': appsettings.SEO_DESCRIPTION,
+        'seo_keywords': appsettings.SEO_KEYWORDS,
     })
 
 def search(request):
@@ -126,24 +133,34 @@ def search(request):
         'categories': Category.objects.all(),
         'сomplexity_choices':[],
         'energy': {
-            'min': math.floor(Recipe.objects.filter(status=u'P').order_by('energy')[0].energy),
-            'max': math.ceil(Recipe.objects.filter(status=u'P').order_by('-energy')[0].energy),
+            'min': math.floor(Recipe.objects.filter(status=u'P') \
+                    .order_by('energy')[0].energy),
+            'max': math.ceil(Recipe.objects.filter(status=u'P') \
+                    .order_by('-energy')[0].energy),
             },
         'time': {
-            'min': int(Recipe.objects.filter(status=u'P').exclude(time=0).order_by('time')[0].time),
-            'max': int(Recipe.objects.filter(status=u'P').exclude(time=0).order_by('-time')[0].time),
+            'min': int(Recipe.objects.filter(status=u'P').exclude(time=0) \
+                    .order_by('time')[0].time),
+            'max': int(Recipe.objects.filter(status=u'P').exclude(time=0) \
+                    .order_by('-time')[0].time),
             },
         'protein': {
-            'min': math.floor(Recipe.objects.filter(status=u'P').order_by('protein')[0].protein),
-            'max': math.ceil(Recipe.objects.filter(status=u'P').order_by('-protein')[0].protein),
+            'min': math.floor(Recipe.objects.filter(status=u'P') \
+                    .order_by('protein')[0].protein),
+            'max': math.ceil(Recipe.objects.filter(status=u'P') \
+                    .order_by('-protein')[0].protein),
             },
         'fat': {
-            'min': math.floor(Recipe.objects.filter(status=u'P').order_by('fat')[0].fat),
-            'max': math.ceil(Recipe.objects.filter(status=u'P').order_by('-fat')[0].fat),
+            'min': math.floor(Recipe.objects.filter(status=u'P') \
+                    .order_by('fat')[0].fat),
+            'max': math.ceil(Recipe.objects.filter(status=u'P') \
+                    .order_by('-fat')[0].fat),
             },
         'carbohydrate': {
-            'min': math.floor(Recipe.objects.filter(status=u'P').order_by('carbohydrate')[0].carbohydrate),
-            'max': math.ceil(Recipe.objects.filter(status=u'P').order_by('-carbohydrate')[0].carbohydrate),
+            'min': math.floor(Recipe.objects.filter(status=u'P') \
+                    .order_by('carbohydrate')[0].carbohydrate),
+            'max': math.ceil(Recipe.objects.filter(status=u'P') \
+                    .order_by('-carbohydrate')[0].carbohydrate),
             },
         'query': request.POST.get('query','').lower(),
         'in_name': request.POST.get('in_name', False),
@@ -152,22 +169,37 @@ def search(request):
         'post':repr(request.POST),
     }
     for category in search['categories']:
-        category.checked = True if request.POST.get('category-%i' % category.id, False) else False
+        category.checked = False
+        if request.POST.get('category-%i' % category.id, False):
+            category.checked = True
     for key, value in Recipe.COMPLEXITY_CHOICES:
-        search['сomplexity_choices'].append({'id':key, 'name':value, 'checked': True if request.POST.get('сomplexity-%i' % key, False) else False})
+        checked = False
+        if request.POST.get('сomplexity-%i' % key, False):
+            checked = True
+        search['сomplexity_choices'].append({
+                'id':key,
+                'name':value,
+                'checked': checked
+                });
 
     for value in ['energy', 'time', 'protein', 'fat', 'carbohydrate']:
-        search[value]['cmin'] = search[value]['min'] if request.POST.get(value + '_min', False) == False else int(request.POST.get(value + '_min'))
-        search[value]['cmax'] = search[value]['max'] if request.POST.get(value + '_max', False) == False else int(request.POST.get(value + '_max'))
-
+        search[value]['cmin'] = int(request.POST.get(value + '_min',
+                                    search[value]['min']))
+        search[value]['cmax'] = int(request.POST.get(value + '_max',
+                                                search[value]['max']))
     result = {}
     r = Recipe.objects.all()
     if search['query'] != '':
-        qn = Q(title__icontains=search['query']) # by recipe name
-        qi = Q(recipeingredient__ingredient__name__icontains=search['query']) # by ingridient name
-        qt = Q(tags__name__icontains=search['query']) # by tag name
+        # by recipe name
+        qn = Q(title__icontains=search['query'])
+        # by ingridient name
+        qi = Q(recipeingredient__ingredient__name__icontains=search['query'])
+        # by tag name
+        qt = Q(tags__name__icontains=search['query'])
         q = False
-        all_empty = not search['in_name'] and not search['in_ingredient'] and not search['in_tag']
+        all_empty = not search['in_name'] and \
+                    not search['in_ingredient'] and \
+                    not search['in_tag']
         if search['in_name'] or all_empty:
             q = qn
         if search['in_ingredient'] or all_empty:
@@ -230,8 +262,8 @@ def search(request):
         'search': search,
         'result': result,
         'title': _("Search"),
-        'seo_description': appsettings.seo_description,
-        'seo_keywords': appsettings.seo_keywords,
+        'seo_description': appsettings.SEO_DESCRIPTION,
+        'seo_keywords': appsettings.SEO_KEYWORDS,
     })
 
 def robots(request):

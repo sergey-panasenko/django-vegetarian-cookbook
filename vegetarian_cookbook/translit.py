@@ -1,3 +1,4 @@
+import re
 
 def transliterate(string):
 
@@ -86,5 +87,7 @@ def transliterate(string):
         string = string.replace(cyrillic_string, latin_string.upper())
 
     string = string.replace(' ', '_')
+
+    string = re.sub(r"([^A-Za-z_\-0-9])+", "", string)
 
     return string

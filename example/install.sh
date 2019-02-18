@@ -4,8 +4,8 @@
 set -e
 
 # creates a virtualenv
-virtualenv --no-site-packages VEGETARIANCOOKBOOK
-source VEGETARIANCOOKBOOK/bin/activate
+virtualenv --no-site-packages env
+source env/bin/activate
 
 pip install -r ../requirements.txt
 
@@ -24,7 +24,7 @@ echo "Compiling messages:"
 
 echo
 echo "to activate the virtualenv:"
-echo "source VEGETARIANCOOKBOOK/bin/activate"
+echo "source env/bin/activate"
 
 echo
 echo 'to create an admin account:'
