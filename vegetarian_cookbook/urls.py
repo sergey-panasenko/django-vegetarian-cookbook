@@ -6,7 +6,6 @@ from django.urls import include, path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from ajax_select import urls as ajax_select_urls
 from . import views
 
 admin.autodiscover()
@@ -32,8 +31,6 @@ urlpatterns = [
     path('robots.txt', views.robots, name='robots'),
     path('sitemap.xml', views.sitemap, name='sitemap'),
     path('ajaximage/', include('ajaximage.urls')),
-    path('admin/lookups/', include(ajax_select_urls)),
-    path('tinymce/', include('tinymce.urls')),
     re_path(r'^(?P<page>\d+)/$', views.index, name='recipes_index_page'),
     path('', views.index, name='recipes_index'),
 ]

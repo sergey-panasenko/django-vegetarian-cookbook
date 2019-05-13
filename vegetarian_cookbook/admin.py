@@ -7,19 +7,22 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from django.urls import reverse
 from imagekit.admin import AdminThumbnail
-from ajax_select import make_ajax_form
-from ajax_select.admin import AjaxSelectAdmin, AjaxSelectAdminTabularInline
 from django.core.exceptions import ValidationError
+from django.contrib.admin import widgets
 from functools import partial
 
+from django.db import models
 from .models import Nutrient, Unit, Ingredient, IngredientUnit
 from .models import IngredientNutritionalValue, Category, Tag, Recipe
 from .models import RecipeIngredient, RecipeImage
-from .forms import RecipeForm, RecipeIngredientInlineForm
+from .forms import IngredientForm, RecipeForm, RecipeIngredientInlineForm
 
 admin.site.site_header = _('My recipes')
 
-admin.site.register(Nutrient)
+
+@admin.register(Nutrient)
+class NutrientAdmin(admin.ModelAdmin):
+    search_fields = ['name']
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -29,28 +32,30 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ['name']
 
 @admin.register(Unit)
-class UnitAdmin(AjaxSelectAdmin):
+class UnitAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Tag)
-class TagAdmin(AjaxSelectAdmin):
+class TagAdmin(admin.ModelAdmin):
     readonly_fields = ('counter',)
     list_display = ('name', 'counter')
+    search_fields = ['name']
     def get_ordering(self, request):
         return ['name']
 
 
-class IngredientUnitInline(AjaxSelectAdminTabularInline):
+class IngredientUnitInline(admin.TabularInline):
     model = IngredientUnit
     extra = 0
 
-class IngredientNutritionalValueInline(AjaxSelectAdminTabularInline):
+class IngredientNutritionalValueInline(admin.TabularInline):
     model = IngredientNutritionalValue
-    form = make_ajax_form(IngredientNutritionalValue, {'nutrient': 'Nutrient'})
+    autocomplete_fields = ('nutrient',)
     extra = 0
 
 @admin.register(Ingredient)
-class IngredientAdmin(AjaxSelectAdmin):
+class IngredientAdmin(admin.ModelAdmin):
+    form = IngredientForm
     list_display = ('admin_thumbnail', 'name', 'generate_url', 'energy',
                     'protein', 'fat', 'carbohydrate')
     list_display_links = ['name']
@@ -76,11 +81,12 @@ class IngredientAdmin(AjaxSelectAdmin):
     generate_url.short_description = _('Url')
 
 
-class RecipeIngredientInline(AjaxSelectAdminTabularInline):
+class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
     form = RecipeIngredientInlineForm
     fields = ('ingredient', 'weight', 'or_col', 'quantity', 'unit', 'roughly')
     readonly_fields = ('or_col',)
+    autocomplete_fields = ('ingredient',)
     def or_col(self, obj):
         return _('OR')
     or_col.short_description = ''
@@ -90,18 +96,20 @@ class RecipeImageInline(admin.TabularInline):
     extra = 1
 
 @admin.register(Recipe)
-class RecipeAdmin(AjaxSelectAdmin):
+class RecipeAdmin(admin.ModelAdmin):
     form = RecipeForm
     list_display = ('admin_thumbnail', 'title', 'status_url', 'fullness',
                         'category', 'recipe_tags', 'recipe_ingredients')
     list_display_links = ['title']
     search_fields = ['title']
+    autocomplete_fields = ('tags',)
     list_filter = ['category', 'tags', 'recipeingredient__ingredient__name']
     exclude = ('url', 'energy', 'protein', 'fat', 'carbohydrate', 'weight')
     fieldsets = (
         (None, {
-            'fields': ('generate_url', 'title', 'status', 'сomplexity',
-                        'category', 'time', 'image', 'tags', 'description')
+            'fields': ('title', ('status', 'generate_url'),
+                    ('сomplexity', 'category'),
+                    'time', 'image', 'tags', 'description')
         }),
         ('Manual setting', {
             'classes': ('collapse',),

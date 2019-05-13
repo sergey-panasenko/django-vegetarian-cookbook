@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from ajaximage.fields import AjaxImageField
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
-from tinymce.models import HTMLField
 from .translit import transliterate
 
 class Nutrient(models.Model):
@@ -35,7 +34,7 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('ingredient name'))
     image = models.ImageField(upload_to='images', blank=True,
                                     verbose_name=_('image'))
-    description = HTMLField(blank=True, verbose_name=_('description'))
+    description = models.TextField(blank=True, verbose_name=_('description'))
     energy = models.DecimalField(max_digits=7, decimal_places=3, null=True,
                                     blank=True, verbose_name=_('energy'))
     protein = models.DecimalField(max_digits=7, decimal_places=3, null=True,
@@ -129,7 +128,7 @@ class Recipe(models.Model):
                             verbose_name=_('category'))
     сomplexity = models.IntegerField(default=1, choices=COMPLEXITY_CHOICES,
                             verbose_name=_('сomplexity'))
-    description = HTMLField(blank=True, verbose_name=_('description'))
+    description = models.TextField(blank=True, verbose_name=_('description'))
     time = models.IntegerField(default=0, null=True, blank=True,
                             verbose_name=_('time'),
                             help_text=_("Total time for cooking, in minutes"))

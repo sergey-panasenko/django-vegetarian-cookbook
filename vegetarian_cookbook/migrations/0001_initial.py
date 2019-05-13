@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import tinymce.models
+#import tinymce.models
 
 
 class Migration(migrations.Migration):
@@ -30,7 +30,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=250, verbose_name='ingredient name')),
                 ('image', models.ImageField(blank=True, upload_to='images', verbose_name='image')),
-                ('description', tinymce.models.HTMLField(blank=True, verbose_name='description')),
+                #('description', tinymce.models.HTMLField(blank=True, verbose_name='description')),
+                ('description', models.TextField(blank=True, verbose_name='description')),
                 ('energy', models.DecimalField(blank=True, decimal_places=4, max_digits=7, null=True, verbose_name='energy')),
                 ('protein', models.DecimalField(blank=True, decimal_places=4, max_digits=7, null=True, verbose_name='protein')),
                 ('carbohydrate', models.DecimalField(blank=True, decimal_places=4, max_digits=7, null=True, verbose_name='carbohydrate')),
@@ -60,7 +61,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=250, verbose_name='title')),
                 ('url', models.CharField(blank=True, default='', max_length=250, unique=True, verbose_name='recipe url')),
                 ('status', models.CharField(choices=[('P', 'published'), ('d', 'draft'), ('i', 'idea')], default='i', max_length=2, verbose_name='status')),
-                ('description', tinymce.models.HTMLField(blank=True, verbose_name='description')),
+                #('description', tinymce.models.HTMLField(blank=True, verbose_name='description')),
+                ('description', models.TextField(blank=True, verbose_name='description')),
                 ('time', models.IntegerField(blank=True, default=0, null=True, verbose_name='time')),
                 ('weight', models.IntegerField(blank=True, default=0, verbose_name='weight')),
                 ('image', models.ImageField(blank=True, null=True, upload_to='images', verbose_name='image')),

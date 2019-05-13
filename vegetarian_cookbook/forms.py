@@ -2,19 +2,24 @@
 # Contacts: <sergey.panasenko@gmail.com>
 # License: https://opensource.org/licenses/AGPL-3.0
 
+from django.contrib import admin
 from django.forms.models import ModelForm
-from ajax_select import make_ajax_field
 from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.utils.html import format_html
 from django.urls import reverse
+from ckeditor.widgets import CKEditorWidget
 
-from .models import Recipe, RecipeIngredient, Unit, IngredientUnit
+from .models import Ingredient, Recipe, RecipeIngredient, IngredientUnit
+
+class IngredientForm(ModelForm):
+    description = forms.CharField(widget=CKEditorWidget())
+    class Meta:
+        model = Ingredient
+        exclude = []
+
 
 class RecipeIngredientInlineForm(ModelForm):
-
-    ingredient = make_ajax_field(RecipeIngredient, 'ingredient', 'Ingredient',
-                                    show_help_text=True, required=True)
 
     def clean(self):
         ingredient = self.cleaned_data.get('ingredient')
@@ -50,10 +55,12 @@ class RecipeIngredientInlineForm(ModelForm):
 
 
 class RecipeForm(ModelForm):
-
-    tags = make_ajax_field(Recipe, 'tags', 'Tag',
-                            show_help_text=False, required=False)
-
+    description = forms.CharField(widget=CKEditorWidget())
     class Meta:
         model = Recipe
         exclude = []
+        labels = {
+            'category': '',
+            'сomplexity': '',
+            'generate_url': '',
+        }

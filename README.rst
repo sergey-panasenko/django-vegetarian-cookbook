@@ -35,8 +35,7 @@ add apps in settings.py
         'bootstrap4',
         'ajaximage',
         'imagekit',
-        'tinymce',
-        'ajax_select',
+        'ckeditor',
     ]
 
 add url in urls.py

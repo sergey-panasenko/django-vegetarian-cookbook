@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='django-vegetarian-cookbook',
-    version='1.0.7',
+    version='1.0.8',
     packages=find_packages(exclude=['example']),
     author='Sergey Panasenko',
     author_email='sergey.panasenko@gmail.com',
@@ -17,6 +17,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     license='AGPL v3',
+    dependency_links=[
+       "git+git://github.com/sergey-panasenko/django-ajaximage.git@dev",
+    ],
     install_requires=requirements,
     url='https://github.com/sergey-panasenko/django-vegetarian-cookbook',
 )
