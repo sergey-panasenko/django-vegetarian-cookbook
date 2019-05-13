@@ -5,6 +5,10 @@ Django Vegetarian Cookbook
 
 Django application for the publication of vegetarian culinary recipes with the calculation of energy and nutrients.
 
+![screenshot](/screenshots/admin_small.png?raw=true)
+
+more images see on screenshots folder
+
 ********
 Features
 ********
