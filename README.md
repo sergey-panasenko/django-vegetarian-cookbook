@@ -1,6 +1,5 @@
-##############################
 Django Vegetarian Cookbook
-##############################
+===============
 
 
 Django application for the publication of vegetarian culinary recipes with the calculation of energy and nutrients.
@@ -9,9 +8,9 @@ Django application for the publication of vegetarian culinary recipes with the c
 
 more images see on screenshots folder
 
-********
-Features
-********
+
+## Features
+
 
 * manage ingridients, include ingridient nutrients and energy
 * manage additional meashures
@@ -23,15 +22,13 @@ Features
 * search recipes by many parameters
 
 
-************
-Installation
-************
+## Installation
 
 pip install django-vegetarian-cookbook
 
 add apps in settings.py
 
-.. code-block:: python
+```python
 
     INSTALLED_APPS = [
         ...
@@ -41,10 +38,11 @@ add apps in settings.py
         'imagekit',
         'ckeditor',
     ]
+```
 
 add url in urls.py
 
-.. code-block:: python
+``` python
 
     from django.conf.urls import include
 
@@ -52,7 +50,9 @@ add url in urls.py
         path('', include('vegetarian_cookbook.urls')),
         path('admin/', admin.site.urls),
     ]
+```
 
 more info see in example app
 
 https://github.com/sergey-panasenko/django-vegetarian-cookbook
+
