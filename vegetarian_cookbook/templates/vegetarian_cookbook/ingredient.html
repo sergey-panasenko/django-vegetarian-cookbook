@@ -34,7 +34,7 @@
                     </div>
                 {% endif %}
                 <div class="ingredient__energy_nutrients__wrapper mt-3">
-                    {% recipe_energy_nutrients 80 True ingredient.energy ingredient.protein ingredient.fat ingredient.carbohydrate  %}
+                    {% recipe_energy_nutrients 80 True ingredient  %}
                 </div>
                 <div class="ingredient__nutrient mt-3">
                     {% for nutrient in ingredient.ingredientnutritionalvalue_set.all %}

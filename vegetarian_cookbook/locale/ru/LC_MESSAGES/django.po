@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 17:35+0000\n"
-"PO-Revision-Date: 2019-02-16 19:47+0200\n"
+"POT-Creation-Date: 2019-10-17 16:46+0000\n"
+"PO-Revision-Date: 2019-10-17 19:48+0300\n"
 "Last-Translator: Sergey Panasenko <sergey.panasenko@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -16,32 +16,32 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: vegetarian_cookbook/admin.py:20
+#: vegetarian_cookbook/admin.py:18
 msgid "My recipes"
 msgstr "Мои рецепты"
 
-#: vegetarian_cookbook/admin.py:27 vegetarian_cookbook/admin.py:59
-#: vegetarian_cookbook/admin.py:119
+#: vegetarian_cookbook/admin.py:32 vegetarian_cookbook/admin.py:75
+#: vegetarian_cookbook/admin.py:147
 msgid "Thumbnail"
 msgstr "Иконка"
 
-#: vegetarian_cookbook/admin.py:76 vegetarian_cookbook/admin.py:162
+#: vegetarian_cookbook/admin.py:94 vegetarian_cookbook/admin.py:197
 msgid "Url"
 msgstr "Ссылка"
 
-#: vegetarian_cookbook/admin.py:85
+#: vegetarian_cookbook/admin.py:107
 msgid "OR"
 msgstr "ИЛИ"
 
-#: vegetarian_cookbook/admin.py:169 vegetarian_cookbook/models.py:127
+#: vegetarian_cookbook/admin.py:206 vegetarian_cookbook/models.py:160
 msgid "status"
 msgstr "статус"
 
-#: vegetarian_cookbook/apps.py:9
+#: vegetarian_cookbook/apps.py:13
 msgid "Vegetarian Cookbook"
 msgstr "Вегетарианская поваренная книга"
 
-#: vegetarian_cookbook/appsettings.py:17
+#: vegetarian_cookbook/appsettings.py:13
 msgid ""
 "The best proven vegetarian recipes with calculation of calories and "
 "nutrients."
@@ -49,218 +49,215 @@ msgstr ""
 "Лучшие проверенные вегетарианские рецепты с расчетом калорий и питательных "
 "веществ."
 
-#: vegetarian_cookbook/appsettings.py:22
+#: vegetarian_cookbook/appsettings.py:16
 msgid ""
-"recipe, culinary, cookbook, vegetarian food, vegan, raw food, raw diet, "
+"recipe, culinary, cookbook, vegetarian food, vegan,raw food, raw diet, "
 "vegetarianism, diet, healthy food,"
 msgstr ""
 "рецепт, кулинария, поваренная книга, вегетарианская пища, вегетарианец, "
 "сырая пища, сыроедение, вегетарианство, диета, здоровое питание,"
 
-#: vegetarian_cookbook/forms.py:27
+#: vegetarian_cookbook/forms.py:36
 msgid "Quantity must be float"
 msgstr "Количество должно быть числом"
 
-#: vegetarian_cookbook/forms.py:30
+#: vegetarian_cookbook/forms.py:39
 msgid "You not set unit for this ingredient"
 msgstr "Вы не установили меру для этого ингредиента"
 
-#: vegetarian_cookbook/forms.py:38
-#, python-format
-msgid ""
-"You not set ratio for this ingredient and unit. Please edit %(ingredient)s "
-"property "
+#: vegetarian_cookbook/forms.py:51
+msgid "You not set ratio for this ingredient and unit.Please edit {} property"
 msgstr ""
 "Вы не установили соотношение для этого ингредиента и меры. Пожалуйста "
-"отредактируйте свойства  %(ingredient)s"
+"отредактируйте свойства {}"
 
-#: vegetarian_cookbook/forms.py:44
+#: vegetarian_cookbook/forms.py:55
 msgid "Zero weight for this ingredient"
 msgstr "Нулевой вес для этого ингридиента "
 
-#: vegetarian_cookbook/models.py:14 vegetarian_cookbook/models.py:100
+#: vegetarian_cookbook/models.py:17 vegetarian_cookbook/models.py:127
 msgid "tag name"
 msgstr "название тега"
 
-#: vegetarian_cookbook/models.py:18 vegetarian_cookbook/models.py:74
-#: vegetarian_cookbook/models.py:82
+#: vegetarian_cookbook/models.py:23 vegetarian_cookbook/models.py:94
+#: vegetarian_cookbook/models.py:104
 msgid "nutrient"
 msgstr "питательное вещество"
 
-#: vegetarian_cookbook/models.py:19 vegetarian_cookbook/models.py:83
+#: vegetarian_cookbook/models.py:24 vegetarian_cookbook/models.py:105
 msgid "nutrients"
 msgstr "питательные вещества"
 
-#: vegetarian_cookbook/models.py:22
+#: vegetarian_cookbook/models.py:29
 msgid "unit name"
 msgstr "название меры"
 
-#: vegetarian_cookbook/models.py:23
+#: vegetarian_cookbook/models.py:30
 msgid "Example: cup"
 msgstr "Пример: чашка"
 
-#: vegetarian_cookbook/models.py:25
+#: vegetarian_cookbook/models.py:32
 msgid "plural form"
 msgstr "множественная форма(ы)"
 
-#: vegetarian_cookbook/models.py:26
+#: vegetarian_cookbook/models.py:33
 msgid "Example: cups (comma separated if language has more 2 plural forms)"
 msgstr ""
 "Пример: чашки, чашек (через запятую, если в языке более двух множественных "
 "форм)"
 
-#: vegetarian_cookbook/models.py:31 vegetarian_cookbook/models.py:61
-#: vegetarian_cookbook/models.py:78
+#: vegetarian_cookbook/models.py:41 vegetarian_cookbook/models.py:77
+#: vegetarian_cookbook/models.py:98
 msgid "unit"
 msgstr "мера"
 
-#: vegetarian_cookbook/models.py:32
+#: vegetarian_cookbook/models.py:42
 msgid "units"
 msgstr "меры"
 
-#: vegetarian_cookbook/models.py:35
+#: vegetarian_cookbook/models.py:47
 msgid "ingredient name"
 msgstr "название ингредиента"
 
-#: vegetarian_cookbook/models.py:37 vegetarian_cookbook/models.py:88
-#: vegetarian_cookbook/models.py:163 vegetarian_cookbook/models.py:288
-#: vegetarian_cookbook/models.py:295 vegetarian_cookbook/models.py:297
+#: vegetarian_cookbook/models.py:49 vegetarian_cookbook/models.py:112
+#: vegetarian_cookbook/models.py:200 vegetarian_cookbook/models.py:351
+#: vegetarian_cookbook/models.py:359 vegetarian_cookbook/models.py:362
 msgid "image"
 msgstr "изображение"
 
-#: vegetarian_cookbook/models.py:38 vegetarian_cookbook/models.py:132
+#: vegetarian_cookbook/models.py:50 vegetarian_cookbook/models.py:165
 msgid "description"
 msgstr "описание"
 
-#: vegetarian_cookbook/models.py:40 vegetarian_cookbook/models.py:141
-#: vegetarian_cookbook/models.py:154
+#: vegetarian_cookbook/models.py:52 vegetarian_cookbook/models.py:176
+#: vegetarian_cookbook/models.py:190
 msgid "energy"
 msgstr "энергетическая ценность"
 
-#: vegetarian_cookbook/models.py:42 vegetarian_cookbook/models.py:144
-#: vegetarian_cookbook/models.py:156
+#: vegetarian_cookbook/models.py:54 vegetarian_cookbook/models.py:179
+#: vegetarian_cookbook/models.py:192
 msgid "protein"
 msgstr "белок"
 
-#: vegetarian_cookbook/models.py:44 vegetarian_cookbook/models.py:147
-#: vegetarian_cookbook/models.py:158
+#: vegetarian_cookbook/models.py:56 vegetarian_cookbook/models.py:182
+#: vegetarian_cookbook/models.py:194
 msgid "fat"
 msgstr "жир"
 
-#: vegetarian_cookbook/models.py:46 vegetarian_cookbook/models.py:150
-#: vegetarian_cookbook/models.py:160
+#: vegetarian_cookbook/models.py:59 vegetarian_cookbook/models.py:186
+#: vegetarian_cookbook/models.py:197
 msgid "carbohydrate"
 msgstr "углеводы"
 
-#: vegetarian_cookbook/models.py:54 vegetarian_cookbook/models.py:59
-#: vegetarian_cookbook/models.py:72 vegetarian_cookbook/models.py:268
-#: vegetarian_cookbook/models.py:280
+#: vegetarian_cookbook/models.py:68 vegetarian_cookbook/models.py:75
+#: vegetarian_cookbook/models.py:92 vegetarian_cookbook/models.py:326
+#: vegetarian_cookbook/models.py:341
 msgid "ingredient"
 msgstr "ингредиент"
 
-#: vegetarian_cookbook/models.py:55 vegetarian_cookbook/models.py:249
-#: vegetarian_cookbook/models.py:281
+#: vegetarian_cookbook/models.py:69 vegetarian_cookbook/models.py:301
+#: vegetarian_cookbook/models.py:342
 msgid "ingredients"
 msgstr "ингредиенты"
 
-#: vegetarian_cookbook/models.py:63
+#: vegetarian_cookbook/models.py:79
 msgid "ratio"
 msgstr "соотношение"
 
-#: vegetarian_cookbook/models.py:67 vegetarian_cookbook/models.py:275
+#: vegetarian_cookbook/models.py:85 vegetarian_cookbook/models.py:334
 msgid "additional unit"
 msgstr "дополнительная мера"
 
-#: vegetarian_cookbook/models.py:68
+#: vegetarian_cookbook/models.py:86
 msgid "additional units"
 msgstr "дополнительные меры"
 
-#: vegetarian_cookbook/models.py:76
+#: vegetarian_cookbook/models.py:96
 msgid "value"
 msgstr "количество"
 
-#: vegetarian_cookbook/models.py:86
+#: vegetarian_cookbook/models.py:110
 msgid "categoty name"
 msgstr "название категории"
 
-#: vegetarian_cookbook/models.py:96 vegetarian_cookbook/models.py:129
+#: vegetarian_cookbook/models.py:121 vegetarian_cookbook/models.py:162
 msgid "category"
 msgstr "категория"
 
-#: vegetarian_cookbook/models.py:97
+#: vegetarian_cookbook/models.py:122
 msgid "categories"
 msgstr "категории"
 
-#: vegetarian_cookbook/models.py:101
+#: vegetarian_cookbook/models.py:128
 msgid "counter"
 msgstr "счетчик"
 
-#: vegetarian_cookbook/models.py:107
+#: vegetarian_cookbook/models.py:138
 msgid "tag"
 msgstr "тег"
 
-#: vegetarian_cookbook/models.py:108 vegetarian_cookbook/models.py:168
-#: vegetarian_cookbook/models.py:241
+#: vegetarian_cookbook/models.py:139 vegetarian_cookbook/models.py:204
+#: vegetarian_cookbook/models.py:205 vegetarian_cookbook/models.py:288
 msgid "tags"
 msgstr "теги"
 
-#: vegetarian_cookbook/models.py:112
+#: vegetarian_cookbook/models.py:145
 msgid "published"
 msgstr "опубликован"
 
-#: vegetarian_cookbook/models.py:113
+#: vegetarian_cookbook/models.py:146
 msgid "draft"
 msgstr "черновик"
 
-#: vegetarian_cookbook/models.py:114
+#: vegetarian_cookbook/models.py:147
 msgid "idea"
 msgstr "идея"
 
-#: vegetarian_cookbook/models.py:117
+#: vegetarian_cookbook/models.py:150
 msgid "еasy"
 msgstr "простой"
 
-#: vegetarian_cookbook/models.py:118
+#: vegetarian_cookbook/models.py:151
 msgid "medium"
 msgstr "средний"
 
-#: vegetarian_cookbook/models.py:119
+#: vegetarian_cookbook/models.py:152
 msgid "hard"
 msgstr "сложный"
 
-#: vegetarian_cookbook/models.py:122 vegetarian_cookbook/models.py:293
+#: vegetarian_cookbook/models.py:155 vegetarian_cookbook/models.py:356
 msgid "title"
 msgstr "заголовок"
 
-#: vegetarian_cookbook/models.py:124
+#: vegetarian_cookbook/models.py:157
 msgid "recipe url"
 msgstr "url рецепта"
 
-#: vegetarian_cookbook/models.py:131
-msgid "сomplexity"
+#: vegetarian_cookbook/models.py:164
+msgid "complexity"
 msgstr "сложность"
 
-#: vegetarian_cookbook/models.py:134
+#: vegetarian_cookbook/models.py:167
 msgid "time"
 msgstr "время"
 
-#: vegetarian_cookbook/models.py:135
+#: vegetarian_cookbook/models.py:168
 msgid "Total time for cooking, in minutes"
 msgstr "Общее время приготовления, в минутах"
 
-#: vegetarian_cookbook/models.py:137 vegetarian_cookbook/models.py:151
+#: vegetarian_cookbook/models.py:171 vegetarian_cookbook/models.py:187
 msgid "weight"
 msgstr "вес"
 
-#: vegetarian_cookbook/models.py:138 vegetarian_cookbook/models.py:152
+#: vegetarian_cookbook/models.py:172 vegetarian_cookbook/models.py:188
 msgid "Weight after cooking, in grams"
 msgstr "Вес после приготовления, в граммах"
 
-#: vegetarian_cookbook/models.py:238
+#: vegetarian_cookbook/models.py:283
 msgid "fullness"
 msgstr "заполненность"
 
-#: vegetarian_cookbook/models.py:246
+#: vegetarian_cookbook/models.py:295
 #: vegetarian_cookbook/templates/vegetarian_cookbook/detail.html:93
 #: vegetarian_cookbook/templates/vegetarian_cookbook/detail.html:96
 #: vegetarian_cookbook/templates/vegetarian_cookbook/templatetags/recipe_energy_nutrients.html:26
@@ -269,68 +266,68 @@ msgstr "заполненность"
 msgid "gr"
 msgstr "гр"
 
-#: vegetarian_cookbook/models.py:258
+#: vegetarian_cookbook/models.py:314
 msgid "Has roughly"
 msgstr "некоторые примерно"
 
-#: vegetarian_cookbook/models.py:260 vegetarian_cookbook/models.py:266
-#: vegetarian_cookbook/models.py:285
+#: vegetarian_cookbook/models.py:317 vegetarian_cookbook/models.py:324
+#: vegetarian_cookbook/models.py:348
 msgid "recipe"
 msgstr "рецепт"
 
-#: vegetarian_cookbook/models.py:261
+#: vegetarian_cookbook/models.py:318
 msgid "recipes"
 msgstr "рецепты"
 
-#: vegetarian_cookbook/models.py:270
+#: vegetarian_cookbook/models.py:328
 msgid "weight in gram"
 msgstr "вес в граммах"
 
-#: vegetarian_cookbook/models.py:272
+#: vegetarian_cookbook/models.py:330
 msgid "quantity on additional unit"
 msgstr "количество в дополнительных мерах"
 
-#: vegetarian_cookbook/models.py:276
+#: vegetarian_cookbook/models.py:335
 #: vegetarian_cookbook/templates/vegetarian_cookbook/detail.html:106
 msgid "roughly"
 msgstr "примерно"
 
-#: vegetarian_cookbook/models.py:298
+#: vegetarian_cookbook/models.py:363
 msgid "images"
 msgstr "изображения"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:39
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:85
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:41
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:87
 msgid "Vegetarian cookbook"
 msgstr "Вегетарианская поваренная книга"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:44
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:89
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:46
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:91
 msgid "Categories"
 msgstr "Категории"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:51
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:92
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:53
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:94
 msgid "Tags &amp; Ingredients"
 msgstr "Теги и Ингредиенты"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:56
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:57
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:68
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:58
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:59
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:70
 #: vegetarian_cookbook/templates/vegetarian_cookbook/search.html:23
 #: vegetarian_cookbook/templates/vegetarian_cookbook/search.html:25
 #: vegetarian_cookbook/templates/vegetarian_cookbook/search.html:35
 #: vegetarian_cookbook/templates/vegetarian_cookbook/tags_ingredients.html:44
 #: vegetarian_cookbook/templates/vegetarian_cookbook/tags_ingredients.html:46
-#: vegetarian_cookbook/views.py:264
+#: vegetarian_cookbook/views.py:192
 msgid "Search"
 msgstr "Найти"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:87
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:89
 msgid "Home"
 msgstr "Главная"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:110
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:112
 #, python-format
 msgid ""
 "All materials of the site are distributed under the terms of the license <a "
@@ -341,10 +338,15 @@ msgstr ""
 "BY-SA</a>\n"
 "                            "
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:115
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:117
 #, python-format
 msgid "based on <a href=\"%(url)s\">Django Vegetarian Cookbook</a>"
 msgstr "основано на <a href=\"%(url)s\">Django Vegetarian Cookbook</a>"
+
+#: vegetarian_cookbook/templates/vegetarian_cookbook/base.html:157
+#: vegetarian_cookbook/templates/vegetarian_cookbook/tags_ingredients.html:77
+msgid "No results."
+msgstr "Нет результатов."
 
 #: vegetarian_cookbook/templates/vegetarian_cookbook/detail.html:38
 #: vegetarian_cookbook/templates/vegetarian_cookbook/ingredient.html:23
@@ -483,11 +485,6 @@ msgstr "Жир"
 msgid "Carbohydrate"
 msgstr "Углеводы"
 
-#: vegetarian_cookbook/templates/vegetarian_cookbook/search.html:130
-#: vegetarian_cookbook/templates/vegetarian_cookbook/tags_ingredients.html:77
-msgid "No results."
-msgstr "Нет результатов."
-
 #: vegetarian_cookbook/templates/vegetarian_cookbook/templatetags/ingredients_list.html:22
 #, python-format
 msgid "plus %(more)s ingredient"
@@ -529,20 +526,19 @@ msgstr[2] "%(minutes)s минут "
 msgid "kCal"
 msgstr "ккал"
 
-#: vegetarian_cookbook/views.py:30
+#: vegetarian_cookbook/views.py:37
 msgid "All recipes"
 msgstr "Все рецепты"
 
-#: vegetarian_cookbook/views.py:64 vegetarian_cookbook/views.py:66
+#: vegetarian_cookbook/views.py:85 vegetarian_cookbook/views.py:87
 #, python-format
 msgid "Tags: %(tags)s."
 msgstr "Теги: %(tags)s."
 
-#: vegetarian_cookbook/views.py:87 vegetarian_cookbook/views.py:89
+#: vegetarian_cookbook/views.py:114 vegetarian_cookbook/views.py:117
 #, python-format
 msgid "Category: %(category)s."
 msgstr "Категория: %(category)s."
 
-#: vegetarian_cookbook/views.py:126
-msgid "Tags & Ingredients"
-msgstr "Теги и Ингредиенты"
+#~ msgid "Tags & Ingredients"
+#~ msgstr "Теги и Ингредиенты"

@@ -68,11 +68,11 @@
                 {% if recipe.time %}
                     {% recipe_cooking_time recipe.time  %}
                 {% endif %}
-                <div class="recipe__сomplexity my-2" style="vertical-align:middle">
-                    <img width="20" class="mr-1" src="{% static 'vegetarian_cookbook/img/icon_complexity.png' %}"> {{ recipe.get_сomplexity_display }}
+                <div class="recipe__complexity my-2" style="vertical-align:middle">
+                    <img width="20" class="mr-1" src="{% static 'vegetarian_cookbook/img/icon_complexity.png' %}"> {{ recipe.get_complexity_display }}
                 </div>
                 <div class="recipe__energy_nutrients__wrapper">
-                    {% recipe_energy_nutrients 80 True recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
+                    {% recipe_energy_nutrients 80 True recipe  %}
                 </div>
             </div>
             <div class="col col-12 col-md-6 col-lg-8">

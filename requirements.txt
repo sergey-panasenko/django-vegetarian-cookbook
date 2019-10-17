@@ -10,4 +10,4 @@ Pillow
 pytz
 six
 sqlparse
-git+git://github.com/sergey-panasenko/django-ajaximage.git@dev
+django-ajaximage

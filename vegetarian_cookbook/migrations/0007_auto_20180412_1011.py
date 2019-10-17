@@ -12,8 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='recipe',
-            name='сomplexity',
-            field=models.IntegerField(choices=[(1, 'еasy'), (2, 'medium'), (3, 'hard')], default=1, verbose_name='сomplexity'),
+            name='complexity',
+            field=models.IntegerField(choices=[(1, 'еasy'), (2, 'medium'), (3, 'hard')], default=1, verbose_name='complexity'),
         ),
         migrations.AlterField(
             model_name='recipe',

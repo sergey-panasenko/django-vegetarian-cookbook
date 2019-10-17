@@ -19,7 +19,9 @@
         <!-- Bootstrap JavaScript if it is in head -->
         <script type="text/javascript" src='{% static "vegetarian_cookbook/js/jquery-3.3.1.min.js" %}' ></script>
         <script type="text/javascript" src='{% static "vegetarian_cookbook/js/brython/brython.js" %}' ></script>
-        {% bootstrap_javascript %}
+        <script type="text/javascript" src='{% static "vegetarian_cookbook/js/underscore-min.js" %}' ></script>
+        <script type="text/javascript" src='{% static "vegetarian_cookbook/js/main.js" %}' ></script>
+    {% bootstrap_javascript %}
         <script type="text/javascript">
           window.onload = function() {
             brython(1);
@@ -62,10 +64,10 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <form class="form-inline hidden-sm-up mobile-search" method="POST" action="{% url 'recipes_search' %}" >
+                    <form id="header-search-form" class="form-inline hidden-sm-up navbar-search" method="POST" action="{% url 'recipes_search' %}" >
                         {% csrf_token %}
                         <div class="input-group">
-                          <input name="query" class="form-control" type="search" placeholder="{% trans 'Search' %}" aria-label="Search">
+                          <input name="query" class="form-control" type="search" placeholder="{% trans 'Search' %}" aria-label="Search" onkeyup="$.Search.simple(event)">
                             <div class="input-group-append">
                                 <button class="btn btn-secondary" type="button" style="padding:0 8px">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26" version="1.1" width="22px" height="22px">
@@ -76,8 +78,8 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="ajax-search-results"></div>
                     </form>
-
                 </nav>
               <div class="collapse" id="navbarToggleExternalContent">
                 <div class="bg-primary p-4">
@@ -126,12 +128,37 @@
     {% bootstrap_javascript %}
     <script type="text/javascript" src='{% static "vegetarian_cookbook/js/jquery-3.3.1.min.js" %}' ></script>
     <script type="text/javascript" src='{% static "vegetarian_cookbook/js/brython/brython.js" %}' ></script>
+    <script type="text/javascript" src='{% static "vegetarian_cookbook/js/underscore-min.js" %}' ></script>
+    <script type="text/javascript" src='{% static "vegetarian_cookbook/js/main.js" %}' ></script>
     <script type="text/javascript">
       window.onload = function() {
         brython(1);
       };
     </script>
 {% endif %}
+
+<script id="ajax-search_template" type="text/template">
+<% if (results && results.length) { %>
+    <ul class="ajax-search__results list-group">
+    <% _(results).each(function(result) { %>
+        <li class="list-group-item">
+            <img class="ajax-search__thumbnail" src="<%= result.thumbail %>">
+            <div>
+                <a href="<%= result.url %>">
+                    <%= result.title %>
+                </a>
+            </div>
+        </li>
+    <% }) %>
+  </ul>
+<% } else { %>
+    <ul class="ajax-search__results">
+        <li class="list-group-item">
+            {% trans "No results." %}
+        <li class="list-group-item">
+    </ul>
+<% } %>
+</script>
 
 {% block bootstrap4_extra_script %}{% endblock %}
 

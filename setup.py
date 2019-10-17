@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='django-vegetarian-cookbook',
-    version='1.0.8',
+    version='1.0.9',
     packages=find_packages(exclude=['example']),
     author='Sergey Panasenko',
     author_email='sergey.panasenko@gmail.com',

@@ -24,10 +24,10 @@
             </a>
         </div>
         <div class="card-body position-relative">
-            <div class="сomplexity сomplexity-{{recipe.сomplexity}}" title="{% trans 'Complexity:' %} {{ recipe.get_сomplexity_display }}">
-                <div class="сomplexity-circle сomplexity-circle-1"></div>
-                <div class="сomplexity-circle сomplexity-circle-2"></div>
-                <div class="сomplexity-circle сomplexity-circle-3"></div>
+            <div class="complexity complexity-{{recipe.complexity}}" title="{% trans 'Complexity:' %} {{ recipe.get_complexity_display }}">
+                <div class="complexity-circle complexity-circle-1"></div>
+                <div class="complexity-circle complexity-circle-2"></div>
+                <div class="complexity-circle complexity-circle-3"></div>
             </div>
             <div class="px-2">
                 <div class="row">
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col col-3 p-0">
                         <div style="width:60px;" class="float-right">
-                            {% recipe_energy_nutrients 60 False recipe.energy recipe.protein recipe.fat recipe.carbohydrate  %}
+                            {% recipe_energy_nutrients 60 False recipe  %}
                         </div>
                     </div>
                 </div>
